@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('mush', {
   onPhaseEvent: (cb) => { phaseEventCallback = cb; },
   fetchMetadata: (url) => ipcRenderer.invoke('fetchMetadata', url),
   readOutputFile: (outputDir, filename) => ipcRenderer.invoke('readOutputFile', outputDir, filename),
+  writeReportFile: (filepath, content) => ipcRenderer.invoke('writeReportFile', filepath, content),
   getProjectRoot: () => ipcRenderer.invoke('getProjectRoot'),
   getTestCases: () => ipcRenderer.invoke('getTestCases'),
   getHistory: () => ipcRenderer.invoke('getHistory'),

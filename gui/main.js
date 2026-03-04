@@ -364,6 +364,14 @@ ipcMain.handle('pausePhase', () => pausePhase());
 ipcMain.handle('resumePhase', () => resumePhase());
 ipcMain.handle('fetchMetadata', (_, url) => fetchMetadata(url));
 ipcMain.handle('readOutputFile', (_, outputDir, filename) => readOutputFile(outputDir, filename));
+ipcMain.handle('writeReportFile', (_, filepath, content) => {
+  try {
+    fs.writeFileSync(filepath, content, 'utf8');
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
 ipcMain.handle('getProjectRoot', () => PROJECT_ROOT);
 ipcMain.handle('getTestCases', () => getTestCases());
 ipcMain.handle('getHistory', () => getHistory());

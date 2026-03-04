@@ -279,13 +279,22 @@
 
       // Time saved calculation
       let timeSavedHtml = '';
+      let reportData = null; // Will store calculated report data
+      
       if (Object.keys(byInterface).length > 1 && totalBytes > 0 && durationSec > 0) {
+        // Get actual wall-clock download time (phase 8)
+        const actualDownloadTime = item.phaseTimings && item.phaseTimings.phase8 
+          ? item.phaseTimings.phase8 
+          : durationSec;
+
         // Calculate actual download speed per interface (bytes per second)
+        // Use wall-clock time, not cumulative thread time
         const interfaceSpeeds = {};
         for (const [name, stats] of Object.entries(byInterface)) {
-          if (stats.timeSum > 0) {
-            // Speed in bytes per second (using cumulative thread time)
-            interfaceSpeeds[name] = (stats.bytes / (stats.timeSum / 1000));
+          if (actualDownloadTime > 0 && stats.bytes > 0) {
+            // Speed = bytes downloaded / wall-clock time
+            // This represents the actual throughput of this interface during the download
+            interfaceSpeeds[name] = (stats.bytes / actualDownloadTime);
           }
         }
 
@@ -303,15 +312,36 @@
           if (fastestInterface && fastestSpeed > 0) {
             // Calculate how long it would have taken with just the fastest interface
             const singleInterfaceTime = totalBytes / fastestSpeed;
-            const actualDownloadTime = item.phaseTimings && item.phaseTimings.phase8 
-              ? item.phaseTimings.phase8 
-              : durationSec;
             
             const timeSaved = singleInterfaceTime - actualDownloadTime;
             const speedupFactor = singleInterfaceTime / actualDownloadTime;
             const timeSavedPct = ((timeSaved / singleInterfaceTime) * 100);
 
             if (timeSaved > 0) {
+              // Store report data for saving
+              reportData = {
+                downloadId: item.id,
+                timestamp: item.timestamp,
+                timeSaved: timeSaved,
+                singleInterfaceTime: singleInterfaceTime,
+                actualDownloadTime: actualDownloadTime,
+                fastestInterface: fastestInterface,
+                interfaceCount: Object.keys(byInterface).length,
+                speedupFactor: speedupFactor,
+                timeSavedPct: timeSavedPct,
+                totalBytes: totalBytes,
+                interfaceSpeeds: interfaceSpeeds,
+                byInterface: byInterface
+              };
+
+              // Save report data to file
+              const reportPath = `${item.outputDir}/report.json`;
+              try {
+                await window.mush.writeReportFile(reportPath, JSON.stringify(reportData, null, 2));
+              } catch (err) {
+                console.error('Failed to save report:', err);
+              }
+
               const formatTime = (sec) => {
                 if (sec < 60) return sec.toFixed(1) + 's';
                 const mins = Math.floor(sec / 60);
@@ -563,7 +593,7 @@
         const historyItem = {
           id: historyId,
           url: opts.url,
-          filename: opts.outputFilename || 'download.bin', // fallback
+          filename: opts.outputFilename || 'download.bin',
           path: opts.outputDir + '/' + (opts.outputFilename || 'download.bin'),
           status: 'Running',
           outputDir: opts.outputDir,
