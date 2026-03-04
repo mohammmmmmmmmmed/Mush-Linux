@@ -1,0 +1,10 @@
+#!/bin/bash
+MUSH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+GUI_DIR="${MUSH_DIR}/gui"
+
+cd "${GUI_DIR}"
+if [ ! -d node_modules ]; then
+    echo "Installing GUI dependencies (first run only)..."
+    npm install --production --silent
+fi
+npm start

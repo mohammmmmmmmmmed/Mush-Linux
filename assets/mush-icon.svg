@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="#007acc" opacity="0.1"/>
+  
+  <!-- Main icon - Multiple network paths -->
+  <g stroke="#007acc" stroke-width="8" fill="none" stroke-linecap="round">
+    <!-- Left node -->
+    <circle cx="50" cy="128" r="20" fill="#007acc"/>
+    
+    <!-- Right node -->
+    <circle cx="206" cy="128" r="20" fill="#4ec9b0"/>
+    
+    <!-- Multiple paths between nodes -->
+    <!-- Path 1 (top) -->
+    <path d="M 70 118 Q 128 60 186 118" stroke="#007acc" stroke-width="6"/>
+    
+    <!-- Path 2 (middle-top) -->
+    <path d="M 70 123 Q 128 90 186 123" stroke="#1a8ad4" stroke-width="6"/>
+    
+    <!-- Path 3 (middle) -->
+    <line x1="70" y1="128" x2="186" y2="128" stroke="#4ec9b0" stroke-width="6"/>
+    
+    <!-- Path 4 (middle-bottom) -->
+    <path d="M 70 133 Q 128 166 186 133" stroke="#1a8ad4" stroke-width="6"/>
+    
+    <!-- Path 5 (bottom) -->
+    <path d="M 70 138 Q 128 196 186 138" stroke="#007acc" stroke-width="6"/>
+  </g>
+  
+  <!-- Download arrow in center -->
+  <g fill="#4ec9b0">
+    <polygon points="128,100 118,120 123,120 123,145 133,145 133,120 138,120"/>
+    <rect x="113" y="145" width="30" height="6" rx="2"/>
+  </g>
+  
+  <!-- Speed indicators (small dots moving along paths) -->
+  <circle cx="90" cy="115" r="4" fill="#4ec9b0" opacity="0.8"/>
+  <circle cx="140" cy="95" r="4" fill="#4ec9b0" opacity="0.6"/>
+  <circle cx="110" cy="128" r="4" fill="#4ec9b0" opacity="0.9"/>
+  <circle cx="160" cy="135" r="4" fill="#4ec9b0" opacity="0.7"/>
+  <circle cx="95" cy="140" r="4" fill="#4ec9b0" opacity="0.5"/>
+</svg>

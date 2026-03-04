@@ -1,0 +1,18 @@
+{
+  "name": "mush-gui",
+  "version": "1.0.0",
+  "description": "Mush Multi-Interface Download Manager — VS Code style",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "and": "^0.0.3",
+    "npm": "^11.11.0",
+    "start": "^5.1.0"
+  }
+}

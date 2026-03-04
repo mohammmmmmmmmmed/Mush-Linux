@@ -1,0 +1,25 @@
+#!/bin/bash
+MUSH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BIN_DIR="${MUSH_DIR}/bin"
+OUTPUT_DIR="${MUSH_DIR}/outputs"
+export PATH="${BIN_DIR}:${PATH}"
+
+if [ "$1" = "-v" ] || [ "$1" = "--version" ]; then
+    echo "Mush v1.0.0"
+    exit 0
+fi
+
+if [ -z "$1" ]; then
+    echo "Usage: mush <URL> [-o DIR]"
+    exit 1
+fi
+
+URL="$1"
+OUTPUT="${OUTPUT_DIR}"
+
+mkdir -p "${OUTPUT}"
+cd "${MUSH_DIR}"
+
+"${BIN_DIR}/mush_phase1_discovery" > "${OUTPUT}/phase1.json"
+"${BIN_DIR}/mush_phase2_chunker" "${URL}" "${OUTPUT}/phase1.json"
+echo "Download complete."

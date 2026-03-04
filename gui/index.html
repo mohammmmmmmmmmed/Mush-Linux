@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <title>Mush — Multi-Interface Download</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <div class="titlebar">Mush — Multi-Interface Download Manager</div>
+  <div class="layout">
+    <nav class="activity-bar">
+      <a class="icon active" data-view="config" title="Configuration">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 5 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+      </a>
+      <a class="icon" data-view="run" title="Run">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </a>
+      <a class="icon" data-view="history" title="History">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </a>
+      <a class="icon" data-view="analytics" title="Analytics">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+      </a>
+    </nav>
+    <aside class="sidebar">
+      <div class="header" id="sidebarTitle">Configuration</div>
+      <div class="content" id="sidebarContent">
+        <!-- Config form -->
+        <div id="configForm">
+          <div class="form-group">
+            <label>Output directory</label>
+            <input type="text" id="outputDir" value="outputs">
+          </div>
+          <div class="form-group">
+            <label>URL</label>
+            <input type="url" id="url" placeholder="https://...">
+          </div>
+          <div class="metadata-row">
+            <input type="text" id="outputFilename" placeholder="Output filename (default from metadata)">
+            <button type="button" class="btn btn-secondary btn-sm" id="fetchMetadata">Fetch metadata</button>
+          </div>
+          <div class="metadata-status" id="metadataStatus"></div>
+          <div class="form-group">
+            <label>File size (bytes)</label>
+            <input type="number" id="fileSize" min="1" value="740927792">
+          </div>
+          <div class="form-group">
+            <label>Chunk size (bytes)</label>
+            <input type="number" id="chunkSize" value="262144" min="32768" max="262144" step="1024">
+          </div>
+          <div class="form-group">
+            <label>Dest (IP:port)</label>
+            <input type="text" id="dest" value="34.233.56.235:443">
+          </div>
+          <div class="form-row">
+            <label>Intervals</label>
+            <input type="number" id="intervals" value="5" min="1">
+            <label>Interval (ms)</label>
+            <input type="number" id="intervalMs" value="1000">
+          </div>
+          <div class="form-group">
+            <label>Modeler alpha</label>
+            <input type="text" id="alpha" value="0.3" size="6">
+          </div>
+          <div class="form-row">
+            <label>Weights T/L/P/S</label>
+            <input type="text" id="wt" value="0.4" placeholder="T" style="width:48px">
+            <input type="text" id="wl" value="0.3" placeholder="L" style="width:48px">
+            <input type="text" id="wp" value="0.2" placeholder="P" style="width:48px">
+            <input type="text" id="ws" value="0.1" placeholder="S" style="width:48px">
+          </div>
+          <div class="form-row">
+            <label>Concurrency</label>
+            <input type="number" id="concurrency" value="8" min="1" max="64">
+            <label>Timeout (s)</label>
+            <input type="number" id="timeout" value="30">
+          </div>
+        </div>
+        <!-- Run panel sidebar: phase buttons + control -->
+        <div id="runSidebar" style="display:none">
+          <div class="phases">
+            <button type="button" class="btn btn-sm" data-phase="1">1 Discovery</button>
+            <button type="button" class="btn btn-sm" data-phase="2">2 Chunk</button>
+            <button type="button" class="btn btn-sm" data-phase="3">3 Integrity</button>
+            <button type="button" class="btn btn-sm" data-phase="4">4 Sockets</button>
+            <button type="button" class="btn btn-sm" data-phase="5">5 Measure</button>
+            <button type="button" class="btn btn-sm" data-phase="6">6 Model</button>
+            <button type="button" class="btn btn-sm" data-phase="7">7 Schedule</button>
+            <button type="button" class="btn btn-sm" data-phase="8">8 Download</button>
+            <button type="button" class="btn btn-sm" data-phase="9">9 Verify</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-phase="full">Full 1→9</button>
+          </div>
+          <div class="run-controls" id="runControls">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnStop" disabled title="Stop">Stop</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnPause" disabled
+              title="Pause (Phase 8)">Pause</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnResume" disabled
+              title="Resume">Resume</button>
+          </div>
+        </div>
+        <!-- History Sidebar -->
+        <div id="historySidebar" style="display:none">
+          <div class="form-group">
+            <label>Filter</label>
+            <input type="text" id="historyFilter" placeholder="Search filenames...">
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="refreshHistory">Refresh</button>
+        </div>
+        <!-- Analytics sidebar: output dir + interface selector -->
+        <div id="analyticsSidebar" style="display:none">
+          <div class="form-group">
+            <label>Output directory (for analytics)</label>
+            <input type="text" id="analyticsOutputDir" value="outputs">
+          </div>
+          <div class="form-group" style="display: flex; align-items: center; gap: 8px; padding: 0 12px 12px;">
+            <label class="live-toggle">
+              <input type="checkbox" id="analyticsLive"> Live refresh (every 3s)
+            </label>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="loadAnalytics" style="margin: 0 12px 12px">Load
+            analytics</button>
+        </div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="tabs">
+        <div class="tab active" data-tab="config">Configuration</div>
+        <div class="tab" data-tab="run">Output</div>
+        <div class="tab" data-tab="history">History</div>
+        <div class="tab" data-tab="analytics">Interface analytics</div>
+      </div>
+      <div class="panel active" id="panelConfig">
+        <p style="color: var(--text-muted);">Configure the pipeline in the sidebar, then switch to <strong>Run</strong>
+          to execute phases.</p>
+      </div>
+      <div class="panel" id="panelHistory">
+        <div class="history-list" id="historyList"></div>
+      </div>
+      <div class="panel output-wrap" id="panelRun">
+        <div class="progress-area" id="progressArea" style="display:none">
+          <div class="progress-time-row">
+            <span id="elapsedText">Elapsed: 0:00</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="progress-text" id="progressText">0 / 0 chunks</div>
+          <div class="progress-per-interface" id="progressPerInterface"></div>
+        </div>
+        <pre id="log">(run a phase to see output)</pre>
+      </div>
+      <div class="panel" id="panelAnalytics">
+        <div class="analytics-header">
+          <span>Interface</span>
+          <select id="interfaceSelect">
+            <option value="">— Select interface —</option>
+          </select>
+        </div>
+        <div id="analyticsCharts"></div>
+        <div class="analytics-empty" id="analyticsEmpty">Load analytics from an output directory that contains
+          measurements.json and (optionally) predictions.json.</div>
+      </div>
+    </main>
+  </div>
+  <div class="status-bar">
+    <span class="item">Mush</span>
+    <span class="item muted" id="statusOutputDir">outputs</span>
+    <span class="item muted" id="statusPhase">—</span>
+  </div>
+
+  <!-- Report Modal -->
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="reportTitle">Performance Report</h3>
+        <span class="close-modal" id="closeModal">&times;</span>
+      </div>
+      <div class="modal-body" id="reportBody">
+        Loading...
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+
+</html>
